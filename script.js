@@ -12,7 +12,61 @@ document.addEventListener("DOMContentLoaded", function() {
     let rows = Math.floor(board.clientHeight / blockHeight);
     let colums = Math.floor(board.clientWidth / blockWidth);
     let intervalid = null;
+    let timerIntervalid = null;
     let blocks = {};
+    
+    // Timer variables
+    let elapsedTime = 0;
+    let score = document.querySelector("#score");
+    let highscore = document.querySelector("#highscore");
+    let highscoretime = document.querySelector("#highscoretime");
+    let timeDisplay = document.querySelector("#time");
+    
+    // Format time to MM:SS format
+    function formatTime(seconds) {
+        let minutes = Math.floor(seconds / 60);
+        let secs = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    // Start the timer
+    function startTimer() {
+        elapsedTime = 0;
+        timerIntervalid = setInterval(() => {
+            elapsedTime++;
+            timeDisplay.innerText = formatTime(elapsedTime);
+        }, 1000);
+    }
+    
+    // Stop the timer
+    function stopTimer() {
+        clearInterval(timerIntervalid);
+    }
+    
+    // Get high score data from localStorage
+    function getHighScoreData() {
+        let data = localStorage.getItem("highScoreData");
+        return data ? JSON.parse(data) : { score: 0, time: "00:00" };
+    }
+    
+    // Load high score on page load
+    function loadHighScore() {
+        let data = getHighScoreData();
+        highscore.innerText = data.score;
+        highscoretime.innerText = data.score > 0 ? `(${data.time})` : '';
+    }
+    
+    // Display high score with time info
+    function displayHighScoreInfo() {
+        let data = getHighScoreData();
+        if (data.score > 0) {
+            console.log(`High Score: ${data.score} achieved in ${data.time}`);
+        }
+    }
+    
+    // Initialize high score display
+    loadHighScore();
+    displayHighScoreInfo();
 
     // Initialize the snake with one segment
     let snake = [
@@ -78,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Check if snake hit the wall (game over)
         if (head.x < 0 || head.x >= rows || head.y < 0 || head.y >= colums) {
+            stopTimer();
             alert("Game Over!");
             clearInterval(intervalid);
             return;
@@ -86,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Check if snake hit itself (game over)
         for (let segment of snake) {
             if (head.x == segment.x && head.y == segment.y) {
+                stopTimer();
                 alert("Game Over! You hit yourself!");
                 clearInterval(intervalid);
                 return;
@@ -106,9 +162,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (parseInt(score.innerText) > parseInt(highscore.innerText)) {
             highscore.innerText = score.innerText;
-            localStorage.setItem("highscore", highscore.innerText);
-        }else{
-            highscore.innerText = localStorage.getItem("highscore") || 0;
+            // Store high score with time achieved
+            let highScoreData = {
+                score: parseInt(score.innerText),
+                time: formatTime(elapsedTime)
+            };
+            localStorage.setItem("highScoreData", JSON.stringify(highScoreData));
+            highscoretime.innerText = `(${formatTime(elapsedTime)})`;
+        } else {
+            let data = getHighScoreData();
+            highscore.innerText = data.score;
+            highscoretime.innerText = data.score > 0 ? `(${data.time})` : '';
         }
 
         // Render updated snake on the board
@@ -121,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Start the game loop - render every 300ms
+    startTimer();
     intervalid = setInterval(() => {
         Render();
     }, 200);
