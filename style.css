@@ -1,0 +1,139 @@
+:root {
+    /* Colors: Using "off-black" and "off-white" to avoid eye strain [8] */
+    --bg-primary-color: #1a1a1a; 
+    --text-primary-color: #f0f0f0;
+    --border-primary-color: #444;
+    
+    /* Game Element Colors */
+    --bg-fill-color: #ffffff86; /* Color for the snake [9] */
+    --bg-food-color: red;  /* Color for the food [10] */
+
+    /* Spacing Variables for consistency [11], [12] */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 40px;
+    
+    /* Border Radius Variables [13] */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: var(--bg-primary-color);
+    color: var(--text-primary-color);
+    font-family: system-ui, -apple-system, sans-serif; /* Uses system default font [14] */
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section {
+    width: 100%;
+    height: 100%;
+    padding: var(--space-2xl); /* Adds padding around the game area [15] */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg); /* Space between Info panel and Board [16] */
+}
+
+/* --- Info Panel Styling --- */
+.infos {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Spreads items evenly [6] */
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border-primary-color);
+    border-radius: var(--radius-sm); /* [17] */
+}
+
+/* --- Board Styling --- */
+.board {
+    width: 100%;
+    flex-grow: 1; /* Ensures board takes up remaining height [18] */
+    border: 1px solid var(--border-primary-color);
+    
+    /* Grid Logic: Automatically fills with 30px blocks [7], [19] */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* [20] */
+    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr));
+}
+
+/* --- Game Blocks (Snake & Food) --- */
+.block {
+    /* Basic block styling, though height/width are controlled by grid */
+    /* border : 0.5px solid var(--bg-fill-color); */
+    border-radius: 150px;
+}
+
+/* Class added via JS to render the Snake */
+.fill {
+    background-color: var(--bg-fill-color); /* [9] */
+}
+
+/* Class added via JS to render the Food */
+.food {
+    background-color: var(--bg-food-color); /* [10] */
+}
+
+/* --- Modal Styling (Start & Game Over) --- */
+.modal {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background [22] */
+    backdrop-filter: blur(5px); /* Blurs the game behind the modal [22] */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.start-game, .game-over {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg); /* [23] */
+}
+
+/* --- Button Styling --- */
+.btn {
+    padding: var(--space-sm) var(--space-md);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease; /* Smooth hover effect [24] */
+}
+
+.btn:hover {
+    transform: scale(1.1); /* Slightly enlarges button on hover [24] */
+    background-color: #fff;
+    color: #000;
+}
+
+
+.fill{
+    background-color: var(--bg-fill-color); /* [9] */
+}
+
+.food{
+    background-color: var(--bg-food-color); /* [10] */
+}
