@@ -78,7 +78,7 @@ section {
 .block {
     /* Basic block styling, though height/width are controlled by grid */
     /* border : 0.5px solid var(--bg-fill-color); */
-    border-radius: 150px;
+    border-radius: 10px;
 }
 
 /* Class added via JS to render the Snake */
